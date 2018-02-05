@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var bottomButton: UIButton!      // Has TAG = 2
     @IBOutlet weak var storyTextView: UILabel!
     
+    @IBOutlet weak var restartButton: UIButton!
+    
     let storyTree = StoryTree()
     var currentStory: Story = Story(storyText: "")
     
@@ -22,8 +24,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        currentStory = storyTree.rootStory
-        updateUI(story: currentStory)
+        restartButton.isHidden = true
+        startOver()
     }
 
     
@@ -35,8 +37,11 @@ class ViewController: UIViewController {
         }else if sender.tag == 2 {
             updateUI(story: (currentStory.choiceB?.storyForChoice)!)
         }
-        
     
+    }
+    
+    @IBAction func restartPressed(_ sender: UIButton) {
+        startOver()
     }
     
     func updateUI(story: Story){
@@ -44,16 +49,27 @@ class ViewController: UIViewController {
         
         storyTextView.text = story.story
         if let choiceAText = story.choiceA?.choice {
+            topButton.isHidden = false
             topButton.setTitle(choiceAText, for: UIControlState.normal)
         } else {
             topButton.isHidden = true
+            restartButton.isHidden = false
         }
         if let choiceBText = story.choiceB?.choice {
+            bottomButton.isHidden = false
             bottomButton.setTitle(choiceBText, for: UIControlState.normal)
         } else {
             bottomButton.isHidden = true
+            restartButton.isHidden = false
         }
         
+    }
+    
+    
+    func startOver(){
+        restartButton.isHidden = true
+        currentStory = storyTree.rootStory
+        updateUI(story: currentStory)
     }
 
 
